@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-
+ 
 class NetPlot():
     def __init__(self):
         # Following defintions are neccessary to build the DrawIO template XML File : 
@@ -54,15 +54,10 @@ class NetPlot():
 
     def addNode(self,nodeName,nodeDescription='',nodeType=''):
         shapeParameters = self._getMXgraphShape(nodeType)
-        UserObject = ET.SubElement(self.root,
-                            'UserObject', 
-                            label=nodeName, 
-                            Hostname=nodeName , 
-                            Description=nodeDescription , 
-                            placeholders="1",
-                            id=nodeName)
-        mxCell = ET.SubElement(UserObject,
+        mxCell = ET.SubElement(self.root,
                                 'mxCell', 
+                                id=nodeName,
+                                value=nodeName,
                                 style=("verticalLabelPosition=bottom;"
                                         "html=1;"
                                         "verticalAlign=top;"
@@ -99,7 +94,16 @@ class NetPlot():
         return
 
     def display_xml(self):
-        return ET.tostring(self.mxfile)   
+        return ET.tostring(self.mxfile) 
+
+    def exportXML(self, filePath):
+        with open(filePath,'wb') as file:
+            tree = ET.ElementTree(self.mxfile)
+            tree.write(file)
+        return
+
+    def __repr__(self):
+        return str(self.display_xml())
 
 
 

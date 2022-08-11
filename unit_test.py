@@ -62,34 +62,35 @@ connection_list = [
 					{'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'TOR_3'},
 					{'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'TOR_4'},
 					# TOR to Server 
-					{'sourceNodeID' : 'Server_1','destinationNodeID' : 'TOR_1'},
-					{'sourceNodeID' : 'Server_2','destinationNodeID' : 'TOR_2'},
-					{'sourceNodeID' : 'Server_3','destinationNodeID' : 'TOR_3'},
-					{'sourceNodeID' : 'Server_4','destinationNodeID' : 'TOR_4'},
-					{'sourceNodeID' : 'Server_5','destinationNodeID' : 'TOR_1'},
-					{'sourceNodeID' : 'Server_6','destinationNodeID' : 'TOR_2'},
-					{'sourceNodeID' : 'Server_7','destinationNodeID' : 'TOR_3'},
-					{'sourceNodeID' : 'Server_8','destinationNodeID' : 'TOR_4'},
-					{'sourceNodeID' : 'Server_9','destinationNodeID' : 'TOR_1'},
-					{'sourceNodeID' : 'Server_10','destinationNodeID' : 'TOR_2'},
-					{'sourceNodeID' : 'Server_11','destinationNodeID' : 'TOR_3'},
-					{'sourceNodeID' : 'Server_12','destinationNodeID' : 'TOR_4'},
-					{'sourceNodeID' : 'Server_13','destinationNodeID' : 'TOR_1'},
-					{'sourceNodeID' : 'Server_14','destinationNodeID' : 'TOR_2'},
-					{'sourceNodeID' : 'Server_15','destinationNodeID' : 'TOR_3'},
-					{'sourceNodeID' : 'Server_16','destinationNodeID' : 'TOR_4'},				
+					{'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_1'},
+					{'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_2'},
+					{'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_3'},
+					{'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_4'},
+					{'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_5'},
+					{'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_6'},
+					{'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_7'},
+					{'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_8'},
+					{'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_9'},
+					{'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_10'},
+					{'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_11'},
+					{'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_12'},
+					{'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_13'},
+					{'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_14'},
+					{'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_15'},
+					{'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_16'},				
 				]
 
 
 x = NetPlot()
-# x.addNode(nodeName='Router_17',nodeType='router')
-# x.addNode(nodeName='Router_18',nodeType='router')
-# x.addLink('Router_17','Router_18')
-# x.addLink('Router_17','Router_1')
+x.addNode(nodeName='Router_17',nodeType='router')
+x.addNode(nodeName='Router_18',nodeType='router')
+x.addLink('Router_17','Router_18')
+x.addLink('Router_17','Router_1')
 x.addNodeList(device_list)
 x.addLinkList(connection_list)
-print(x.display_xml())
-
+# print(x.display_xml())
+# print(x)
+x.exportXML('output.xml')
 
 
 
