@@ -82,10 +82,10 @@ connection_list = [
 
 
 x = NetPlot()
-x.addNode(nodeName='Router_17',nodeType='router')
-x.addNode(nodeName='Router_18',nodeType='router')
-x.addLink('Router_17','Router_18')
-x.addLink('Router_17','Router_1')
+# x.addNode(nodeName='Router_17',nodeType='router')
+# x.addNode(nodeName='Router_18',nodeType='router')
+# x.addLink('Router_17','Router_18')
+# x.addLink('Router_17','Router_1')
 x.addNodeList(device_list)
 x.addLinkList(connection_list)
 print(x.display_xml())
