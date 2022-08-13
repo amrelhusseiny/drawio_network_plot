@@ -1,13 +1,6 @@
+
 from drawio_network_plot import NetPlot
 
-''' 
-Testing topology is mafde of :
-	- 2 routers
-	- 2 Core/Spine Switches
-	- 2 Out of path firewalls
-	- 4 Leaf/Access switches
-	- 16 Server
-'''
 device_list = [
 				# Routers
 				{'nodeName' : 'Router_1','nodeType' : 'router','nodeDescription' : 'External Peering Provider 1'},
@@ -79,8 +72,6 @@ connection_list = [
 					{'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_15'},
 					{'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_16'},				
 				]
-
-
 x = NetPlot()
 x.addNode(nodeName='Router_17',nodeType='router')
 x.addNode(nodeName='Router_18',nodeType='router')
@@ -90,12 +81,7 @@ x.addNodeList(device_list)
 x.addLinkList(connection_list)
 # print(x.display_xml())
 # print(x)
-x.exportXML('output.xml')
-
-
-
-
-
+x.exportXML('examples/output.xml')
 
 
 
