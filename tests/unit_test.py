@@ -82,7 +82,10 @@ x.addLinkList(connection_list)
 # print(x.display_xml())
 # print(x)
 x.exportXML('examples/output.xml')
-
+for mxCell in x.root:
+	# print(item.get('value'))
+	# print(item.get('id'))
+	print(mxCell.attrib)
 
 
 

@@ -1,7 +1,11 @@
 import xml.etree.ElementTree as ET
  
 class NetPlot():
+    '''
+        Creates the DrawIO Plot XML file , based on Jgraph template
+    '''
     def __init__(self):
+        # initiating the blocks needed for the DrawIO XML template , standard in every plot
         self.mxfile = ET.Element('mxfile',host="Electron",agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.0 Chrome/100.0.4896.160 Electron/18.3.2 Safari/537.36",type="device")
         self.diagram = ET.SubElement(self.mxfile,'diagram',id="diagram_1",name="Page-1")
         self.mxGraphModel = ET.SubElement(self.diagram,
@@ -21,33 +25,44 @@ class NetPlot():
                                             shadow="0")
         self.root = ET.SubElement(self.mxGraphModel,'root')
         self.mxCellID0 = ET.SubElement(self.root,'mxCell' , id="0")
+        # Each Node and Edge are a child to the Parent id "1" 
         self.mxCellID1 = ET.SubElement(self.root,'mxCell' , id="1" , parent="0" , style=";html=1;") 
 
     def _getMXgraphShape(self,nodeType):
+        # Defining the shape that can be used , it uses shapes already shipped with DrawIO application (More shapes will be added)
+        # we are also using the "nodeLevel" variable to set the hirarichy of the plot if standards are not adhered by in using library
         if nodeType == 'router':
             return {'style':'shape=mxgraph.cisco19.rect;prIcon=router;fillColor=#FAFAFA;strokeColor=#005073;html=1;',
                     'width':'50',
-                    'height':'50'}
+                    'height':'50',
+                    'nodeLevel':'1'
+                    }
         elif nodeType == 'l2_switch':
             return {'style':'shape=mxgraph.cisco19.rect;prIcon=l2_switch;fillColor=#FAFAFA;strokeColor=#005073;html=1;',
                     'width':'50',
-                    'height':'50'}
+                    'height':'50',
+                    'nodeLevel':'3'}
         elif nodeType == 'l3_switch':
             return {'style':'shape=mxgraph.cisco19.rect;prIcon=l3_switch;fillColor=#FAFAFA;strokeColor=#005073;html=1;',
                     'width':'50',
-                    'height':'50'}
+                    'height':'50',
+                    'nodeLevel':'2'}
         elif nodeType == 'firewall':
             return {'style':'shape=mxgraph.cisco19.rect;prIcon=firewall;fillColor=#FAFAFA;strokeColor=#005073;html=1;',
                     'width':'64',
-                    'height':'50'}
+                    'height':'50',
+                    'nodeLevel':'2'}
         elif nodeType == 'server':
             return {'style':'shape=mxgraph.cisco19.rect;prIcon=server;fillColor=#FAFAFA;strokeColor=#005073;html=1;',
                     'width':'27',
-                    'height':'50'}
+                    'height':'50',
+                    'nodeLevel':'4'}
         else :
             return {'style':'shape=mxgraph.cisco19.rect;prIcon=server;fillColor=#FAFAFA;strokeColor=#005073;html=1;',
                     'width':'27',
-                    'height':'50'}
+                    'height':'50',
+                    'nodeLevel':'4'}
+
 
     def addNode(self,nodeName,nodeDescription='',nodeType=''):
         shapeParameters = self._getMXgraphShape(nodeType)
@@ -73,10 +88,16 @@ class NetPlot():
         return
 
     def addLink(self,sourceNodeID,destinationNodeID):
+        try: 
+            for mxCell in self.root:
+                print((mxCell.attrib['id']))
+                if mxCell.attrib['id'] == sourceNodeID:
+                    print(f'Element found + {mxCell.attrib['id']}')
+        except Exception as e:
+            print(e)
         mxCell = ET.SubElement(self.root,
                                 'mxCell',
                                 id=sourceNodeID+destinationNodeID,
-                                value="",
                                 style="endFill=0;endArrow=none;",
                                 parent="1",
                                 source=sourceNodeID,

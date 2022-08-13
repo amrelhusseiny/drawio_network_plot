@@ -109,5 +109,4 @@ x.exportXML('examples/output.xml')
 
 ```
 #### Output
-Output looks as follows :
 ![Data Center Example output](examples/example_1_output_snapshot.png)
