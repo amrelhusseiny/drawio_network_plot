@@ -14,7 +14,7 @@ The "NetPlot" class is itself the plot , you initiate it and then you can do the
 ### Example 1 : Datacenter Plot 
 this example demonstrates how to use both the addition of object or list of objects at once : 
 
-'''
+```
 
 from drawio_network_plot import NetPlot
 
@@ -105,4 +105,4 @@ print(x)
 # 3- Exporting to XML file directly
 x.exportXML('examples/output.xml')
 
-'''
+```
