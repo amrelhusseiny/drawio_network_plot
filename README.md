@@ -89,9 +89,12 @@ connection_list = [
                     {'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_15'},
                     {'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_16'},               
                 ]
+# Initiating an Plot instance 
 x = NetPlot()
+# Adding node by node and edge by edge
 x.addNode(nodeName='Router_17',nodeType='router')
 x.addNode(nodeName='Router_18',nodeType='router')
+# Adding lists of nodes and edges 
 x.addLink('Router_17','Router_18')
 x.addLink('Router_17','Router_1')
 x.addNodeList(device_list)
