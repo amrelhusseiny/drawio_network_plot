@@ -8,6 +8,7 @@ The "NetPlot" class is itself the plot , you initiate it and then you can do the
 - Add a Node or a Nodes list .
 - Add an Edge or a list of Edges .
 >Note : the edges has Source and Destination nodes , better to always put the Parent device in the Source node and the Child node in the Destination node , this will affect the way DrawIO does automatic Layouts .
+- After you open the file in DrawIO , you will see everything stacked on top of each other , simply go to "Arrange/Layout/Vertical Tree" and it will arrange the nodes and like the hirarichy of the Data center , you can also try out other layout options .
 ## Examples
 ### Example 1 : Datacenter Plot 
 this example demonstrates how to use both the addition of object or list of objects at once : 
