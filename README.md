@@ -15,6 +15,7 @@ The "NetPlot" class is itself the plot , you initiate it and then you can do the
 this example demonstrates how to use both the addition of object or list of objects at once : 
 
 '''
+
 from drawio_network_plot import NetPlot
 
 device_list = [
