@@ -1,4 +1,4 @@
-from drawio_network_plot import NetPlot
+from drawio_network_plot.drawio_network_plot import NetPlot
 
 device_list = [
 				# Routers
@@ -81,10 +81,10 @@ x.addLinkList(connection_list)
 # print(x.display_xml())
 # print(x)
 x.exportXML('examples/output.xml')
-for mxCell in x.root:
+# for mxCell in x.root:
 	# print(item.get('value'))
 	# print(item.get('id'))
-	print(mxCell.attrib)
+	# print(mxCell.attrib)
 
 
 

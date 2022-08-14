@@ -90,9 +90,14 @@ class NetPlot():
     def addLink(self,sourceNodeID,destinationNodeID):
         try: 
             for mxCell in self.root:
-                print((mxCell.attrib['id']))
+                print(mxCell.attrib['id'])
+                print(type(mxCell.attrib['id']))
+                print(sourceNodeID)
+                print(type(sourceNodeID))
                 if mxCell.attrib['id'] == sourceNodeID:
-                    print(f'Element found + {mxCell.attrib['id']}')
+                    print('Element found' + {mxCell.attrib['id']})
+                    break
+            return
         except Exception as e:
             print(e)
         mxCell = ET.SubElement(self.root,
