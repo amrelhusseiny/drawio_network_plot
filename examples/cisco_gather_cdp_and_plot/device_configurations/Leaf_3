@@ -1,0 +1,152 @@
+Leaf_3#show  running-config 
+Building configuration...
+
+Current configuration : 1817 bytes
+!
+! Last configuration change at 21:00:39 UTC Mon Sep 5 2022
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Leaf_3
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+!
+aaa new-model
+aaa local authentication default authorization default
+!
+!
+aaa authentication login default local
+aaa authentication login automation local
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+!
+!
+!
+ip domain name default
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!         
+!
+!
+!
+username automation password 0 1234567
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback100
+ ip address 100.0.3.3 255.255.255.255
+ ip ospf 1 area 0
+!
+interface FastEthernet0/0
+ no ip address
+ duplex full
+!
+interface Ethernet1/0
+ no ip address
+ duplex full
+!
+interface Ethernet1/1
+ no ip address
+ duplex full
+!
+interface Ethernet1/2
+ no ip address
+ duplex full
+!
+interface Ethernet1/3
+ ip address 10.0.37.2 255.255.255.0
+ ip ospf 1 area 0
+ duplex full
+!
+interface Ethernet1/4
+ no ip address
+ duplex full
+!
+interface Ethernet1/5
+ no ip address
+ duplex full
+!
+interface Ethernet1/6
+ ip address 10.0.47.2 255.255.255.0
+ ip ospf 1 area 0
+ duplex full
+!
+interface Ethernet1/7
+ no ip address
+ duplex full
+!
+router ospf 1
+ router-id 100.0.3.3
+ network 10.0.0.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!         
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!         
+line con 0
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ transport input all
+line vty 5 7
+ transport input all
+!
+!
+end
