@@ -1,5 +1,7 @@
 import xml.etree.ElementTree as ET
- 
+import logging
+
+
 class NetPlot():
     '''
         Creates the DrawIO Plot XML file , based on Jgraph template
@@ -65,37 +67,45 @@ class NetPlot():
 
 
     def addNode(self,nodeName,nodeDescription='',nodeType=''):
-        shapeParameters = self._getMXgraphShape(nodeType)
-        mxCell = ET.SubElement(self.root,
-                                'mxCell', 
-                                id=nodeName,
-                                value=nodeName,
-                                style=("verticalLabelPosition=bottom;"
-                                        "html=1;"
-                                        "verticalAlign=top;"
-                                        "aspect=fixed;align=center;"
-                                        "pointerEvents=1;"
-                                        f"{shapeParameters['style']}"
-                                        ""),
-                                parent="1",
-                                vertex="1")
-        mxGeometry = ET.SubElement(mxCell, 'mxGeometry',width=shapeParameters['width'] ,height=shapeParameters['height'] )
-        mxGeometry.set('as','geometry')
+        try:
+            shapeParameters = self._getMXgraphShape(nodeType)
+            mxCell = ET.SubElement(self.root,
+                                    'mxCell', 
+                                    id=nodeName,
+                                    value=nodeName,
+                                    style=("verticalLabelPosition=bottom;"
+                                            "html=1;"
+                                            "verticalAlign=top;"
+                                            "aspect=fixed;align=center;"
+                                            "pointerEvents=1;"
+                                            f"{shapeParameters['style']}"
+                                            ""),
+                                    parent="1",
+                                    vertex="1")
+            mxGeometry = ET.SubElement(mxCell, 'mxGeometry',width=shapeParameters['width'] ,height=shapeParameters['height'] )
+            mxGeometry.set('as','geometry')
+            return
+        except Exception as e:
+            logging.error('Error in adding Node: {}'.format(e))
 
     def addNodeList(self,nodeListOfDictionary):
-        for node in nodeListOfDictionary:
-            self.addNode(nodeName=node['nodeName'],nodeDescription=node['nodeDescription'],nodeType=node['nodeType'])
-        return
+        try:
+            for node in nodeListOfDictionary:
+                self.addNode(nodeName=node['nodeName'],nodeDescription=node['nodeDescription'],nodeType=node['nodeType'])
+            return
+        except Exception as e:
+            logging.error('Error in adding Node List: {}'.format(e))
 
     def addLink(self,sourceNodeID,destinationNodeID):
         try: 
             for mxCell in self.root:
                 if mxCell.attrib['id'] == sourceNodeID:
-                    print('Element found' + {mxCell.attrib['id']})
+                    logging.debug('Source Node ID {} found'.format(sourceNodeID))
                     break
             return
         except Exception as e:
-            print(e)
+            logging.error('Error in adding Link: {}'.format(e))
+
         mxCell = ET.SubElement(self.root,
                                 'mxCell',
                                 id=sourceNodeID+destinationNodeID,
@@ -108,9 +118,12 @@ class NetPlot():
         mxGeometry.set('as','geometry')
 
     def addLinkList(self,linkListOfDictionary):
-        for link in linkListOfDictionary:
-            self.addLink(sourceNodeID=link['sourceNodeID'] , destinationNodeID=link['destinationNodeID'] )
-        return
+        try:
+            for link in linkListOfDictionary:
+                self.addLink(sourceNodeID=link['sourceNodeID'] , destinationNodeID=link['destinationNodeID'] )
+            return
+        except Exception as e:
+            logging.error('Error in adding Link List: {}'.format(e))
 
     def display_xml(self):
         return ET.tostring(self.mxfile) 
@@ -123,27 +136,3 @@ class NetPlot():
 
     def __repr__(self):
         return str(self.display_xml())
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
