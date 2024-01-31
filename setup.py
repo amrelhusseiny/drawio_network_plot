@@ -12,7 +12,7 @@ with open('README.md') as readme_file:
 setup(
        # the name must match the folder name 'verysimplemodule'
         name="drawio_network_plot", 
-        version="0.0.02 Beta",
+        version="0.0.02Beta",
         author="Amr ElHusseiny",
         author_email="amroashram@hotmail.com",
         description=DESCRIPTION,
