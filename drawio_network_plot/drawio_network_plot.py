@@ -96,34 +96,51 @@ class NetPlot():
         except Exception as e:
             logging.error('Error in adding Node List: {}'.format(e))
 
-    def addLink(self,sourceNodeID,destinationNodeID):
-        try: 
-            for mxCell in self.root:
-                if mxCell.attrib['id'] == sourceNodeID:
-                    logging.debug('Source Node ID {} found'.format(sourceNodeID))
-                    break
-            return
-        except Exception as e:
-            logging.error('Error in adding Link: {}'.format(e))
+    def addLink(self, sourceNodeID, destinationNodeID, sourceLabel, destinationLabel):
+        linkID = f"link-{sourceNodeID}-{destinationNodeID}"
+        mxCellLink = ET.SubElement(self.root,
+                                   'mxCell',
+                                   id=linkID,
+                                   style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;",
+                                   edge="1",
+                                   parent="1",
+                                   source=sourceNodeID,
+                                   target=destinationNodeID)
+        mxGeometryLink = ET.SubElement(mxCellLink, 'mxGeometry', relative="1")
+        mxGeometryLink.set('as', 'geometry')
 
-        mxCell = ET.SubElement(self.root,
-                                'mxCell',
-                                id=sourceNodeID+destinationNodeID,
-                                style="endFill=0;endArrow=none;",
-                                parent="1",
-                                source=sourceNodeID,
-                                target=destinationNodeID,
-                                edge="1")
-        mxGeometry = ET.SubElement(mxCell, 'mxGeometry')
-        mxGeometry.set('as','geometry')
+        # Add source label
+        if sourceLabel:
+            mxCellSourceLabel = ET.SubElement(self.root, 'mxCell',
+                                              value=sourceLabel,
+                                              style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];",
+                                              vertex="1",
+                                              connectable="0",
+                                              parent=linkID)
+            mxGeometrySourceLabel = ET.SubElement(mxCellSourceLabel, 'mxGeometry', relative="1")
+            mxGeometrySourceLabel.set('as', 'geometry')
+            mxPointSourceLabel = ET.SubElement(mxGeometrySourceLabel, 'mxPoint', x="0.25", y="-20")
+            mxPointSourceLabel.set('as', 'offset')
 
-    def addLinkList(self,linkListOfDictionary):
-        try:
-            for link in linkListOfDictionary:
-                self.addLink(sourceNodeID=link['sourceNodeID'] , destinationNodeID=link['destinationNodeID'] )
-            return
-        except Exception as e:
-            logging.error('Error in adding Link List: {}'.format(e))
+        # Add destination label
+        if destinationLabel:
+            mxCellDestinationLabel = ET.SubElement(self.root, 'mxCell',
+                                                   value=destinationLabel,
+                                                   style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];",
+                                                   vertex="1",
+                                                   connectable="0",
+                                                   parent=linkID)
+            mxGeometryDestinationLabel = ET.SubElement(mxCellDestinationLabel, 'mxGeometry', relative="1")
+            mxGeometryDestinationLabel.set('as', 'geometry')
+            mxPointDestinationLabel = ET.SubElement(mxGeometryDestinationLabel, 'mxPoint', x="0.75", y="20")
+            mxPointDestinationLabel.set('as', 'offset')
+
+    def addLinkList(self, linkListOfDictionary):
+        for link in linkListOfDictionary:
+            self.addLink(sourceNodeID=link['sourceNodeID'],
+                         destinationNodeID=link['destinationNodeID'],
+                         sourceLabel=link['sourceLabel'],
+                         destinationLabel=link['destinationLabel'])
 
     def display_xml(self):
         return ET.tostring(self.mxfile) 
