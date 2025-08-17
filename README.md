@@ -1,112 +1,90 @@
-# drawio_network_plot
-## Overview
-- Package is mainly created for Network Automation , can be used in conjunction with other libraries to generate DrawIO plot for your Network (Service Provider ot Data Centter Network).
-- Available devices : Router , L3_Switch , L2_switch , Firewall , Server ( More to be added )
-- Output generated can be directly opened by DrawIO application (Desktop or Web version)
-## Understanding the logic 
-The "NetPlot" class is itself the plot , you initiate it and then you can do the following : 
-- Add a Node or a Nodes list .
-- Add an Edge or a list of Edges .
->Note : the edges has Source and Destination nodes , better to always put the Parent device in the Source node and the Child node in the Destination node , this will affect the way DrawIO does automatic Layouts .
-- After you open the file in DrawIO , you will see everything stacked on top of each other , simply go to "Arrange/Layout/Vertical Tree" and it will arrange the nodes and like the hirarichy of the Data center , you can also try out other layout options .
-## Examples
-### Example 1 : Datacenter Plot 
-this example demonstrates how to use both the addition of object or list of objects at once : 
-#### Code
-```python
+# Draw.io Network Plotter
 
+## Overview
+
+`drawio-network-plot` is a Python library for programmatically creating Draw.io diagrams of network topologies. It's designed for network automation engineers and anyone who needs to generate network diagrams from code. You can use it to visualize your network infrastructure, whether it's in a data center or a service provider network.
+
+The library generates an XML file that can be directly imported into the Draw.io application (both desktop and web versions) for further editing or exporting to other formats like PNG, SVG, or PDF.
+
+## Features
+
+- **Programmatic Diagram Creation:** Define your network topology in Python and generate a Draw.io diagram from it.
+- **Customizable Nodes:** Add nodes to your diagram with specific details:
+    - `nodeName`: A unique identifier for the node.
+    - `nodeType`: Determines the icon used for the node (e.g., `router`, `l3_switch`, `server`).
+    - `hostname`: The hostname of the device.
+    - `model`: The hardware model of the device.
+    - `role`: The function of the device in the network.
+- **Labeled Links:** Connect your nodes with links that can have labels at each end, perfect for showing interface names, IP addresses, or other connection details.
+- **Standard Draw.io Shapes:** Uses built-in Cisco icon sets from Draw.io for a professional look.
+- **Flexible Output:** Generate the diagram as an XML string or export it directly to a file.
+
+## How It Works
+
+The main component is the `NetPlot` class. Here’s the basic workflow:
+
+1.  **Instantiate `NetPlot`:** Create an instance of the `NetPlot` class to start building your diagram.
+2.  **Add Nodes:** Use the `addNode()` method for individual nodes or `addNodeList()` for a batch of nodes. Provide details like `nodeName`, `nodeType`, `hostname`, `model`, and `role`.
+3.  **Add Links:** Use the `addLink()` method or `addLinkList()` to connect your nodes. You can add `source_label` and `target_label` to describe the connection points.
+4.  **Generate Output:** Get the diagram as an XML string with `display_xml()` or save it to a file with `exportXML()`.
+
+Once you open the generated file in Draw.io, the nodes and links will be stacked. To arrange them automatically, use one of Draw.io's layout options, such as **Arrange > Layout > Vertical Tree**.
+
+## Example
+
+Here's an example of how to create a simple data center topology:
+
+```python
 from drawio_network_plot import NetPlot
 
+# Define the nodes in the topology
 device_list = [
-                # Routers
-                {'nodeName' : 'Router_1','nodeType' : 'router','nodeDescription' : 'External Peering Provider 1'},
-                {'nodeName' : 'Router_2','nodeType' : 'router','nodeDescription' : 'External Peering Provider 2'},
-                # Core
-                {'nodeName' : 'Core_switch_1','nodeType' : 'l3_switch','nodeDescription' : 'Spine Switch 01'},
-                {'nodeName' : 'Core_switch_2','nodeType' : 'l3_switch','nodeDescription' : 'Spine Switch 02'},
-                # Firewalls
-                {'nodeName' : 'FW_1','nodeType' : 'firewall','nodeDescription' : 'Firewall 01'},
-                {'nodeName' : 'FW_2','nodeType' : 'firewall','nodeDescription' : 'Firewall 02'},
-                # Leafs
-                {'nodeName' : 'TOR_1','nodeType' : 'l2_switch','nodeDescription' : 'Leaf Switch 01'},
-                {'nodeName' : 'TOR_2','nodeType' : 'l2_switch','nodeDescription' : 'Leaf Switch 02'},
-                {'nodeName' : 'TOR_3','nodeType' : 'l2_switch','nodeDescription' : 'Leaf Switch 03'},
-                {'nodeName' : 'TOR_4','nodeType' : 'l2_switch','nodeDescription' : 'Leaf Switch 04'},
-                # Servers 
-                {'nodeName' : 'Server_1','nodeType' : 'server','nodeDescription' : 'Server 1'},
-                {'nodeName' : 'Server_2','nodeType' : 'server','nodeDescription' : 'Server 2'},
-                {'nodeName' : 'Server_3','nodeType' : 'server','nodeDescription' : 'Server 3'},
-                {'nodeName' : 'Server_4','nodeType' : 'server','nodeDescription' : 'Server 4'},
-                {'nodeName' : 'Server_5','nodeType' : 'server','nodeDescription' : 'Server 5'},
-                {'nodeName' : 'Server_6','nodeType' : 'server','nodeDescription' : 'Server 6'},
-                {'nodeName' : 'Server_7','nodeType' : 'server','nodeDescription' : 'Server 7'},
-                {'nodeName' : 'Server_8','nodeType' : 'server','nodeDescription' : 'Server 8'},
-                {'nodeName' : 'Server_9','nodeType' : 'server','nodeDescription' : 'Server 9'},
-                {'nodeName' : 'Server_10','nodeType' : 'server','nodeDescription' : 'Server 10'},
-                {'nodeName' : 'Server_11','nodeType' : 'server','nodeDescription' : 'Server 11'},
-                {'nodeName' : 'Server_12','nodeType' : 'server','nodeDescription' : 'Server 12'},
-                {'nodeName' : 'Server_13','nodeType' : 'server','nodeDescription' : 'Server 13'},
-                {'nodeName' : 'Server_14','nodeType' : 'server','nodeDescription' : 'Server 14'},
-                {'nodeName' : 'Server_15','nodeType' : 'server','nodeDescription' : 'Server 15'},
-                {'nodeName' : 'Server_16','nodeType' : 'server','nodeDescription' : 'Server 16'},
-              ]
+    # Routers
+    {'nodeName': 'Router_1', 'nodeType': 'router', 'hostname': 'edge-router-01', 'model': 'Cisco ASR1000', 'role': 'Internet Gateway'},
+    {'nodeName': 'Router_2', 'nodeType': 'router', 'hostname': 'edge-router-02', 'model': 'Cisco ASR1000', 'role': 'Internet Gateway'},
+    # Core Switches
+    {'nodeName': 'Core_switch_1', 'nodeType': 'l3_switch', 'hostname': 'core-switch-01', 'model': 'Cisco Nexus 9000', 'role': 'Spine'},
+    {'nodeName': 'Core_switch_2', 'nodeType': 'l3_switch', 'hostname': 'core-switch-02', 'model': 'Cisco Nexus 9000', 'role': 'Spine'},
+    # Leaf Switches
+    {'nodeName': 'TOR_1', 'nodeType': 'l2_switch', 'hostname': 'leaf-switch-01', 'model': 'Cisco Nexus 5000', 'role': 'Top-of-Rack'},
+    {'nodeName': 'TOR_2', 'nodeType': 'l2_switch', 'hostname': 'leaf-switch-02', 'model': 'Cisco Nexus 5000', 'role': 'Top-of-Rack'},
+    # Servers
+    {'nodeName': 'Server_1', 'nodeType': 'server', 'hostname': 'web-server-01', 'model': 'Dell PowerEdge', 'role': 'Web Server'},
+    {'nodeName': 'Server_2', 'nodeType': 'server', 'hostname': 'db-server-01', 'model': 'Dell PowerEdge', 'role': 'Database Server'},
+]
 
-
+# Define the connections between the nodes
 connection_list = [
-                    # Router to Core
-                    {'sourceNodeID' : 'Router_1','destinationNodeID' : 'Core_switch_1'},
-                    {'sourceNodeID' : 'Router_1','destinationNodeID' : 'Core_switch_2'},
-                    {'sourceNodeID' : 'Router_2','destinationNodeID' : 'Core_switch_1'},
-                    {'sourceNodeID' : 'Router_2','destinationNodeID' : 'Core_switch_2'},
-                    # Core to FW 
-                    {'sourceNodeID' : 'Core_switch_1','destinationNodeID' : 'FW_1'},
-                    {'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'FW_2'},
-                    # Core to TOR 
-                    {'sourceNodeID' : 'Core_switch_1','destinationNodeID' : 'TOR_1'},
-                    {'sourceNodeID' : 'Core_switch_1','destinationNodeID' : 'TOR_2'},
-                    {'sourceNodeID' : 'Core_switch_1','destinationNodeID' : 'TOR_3'},
-                    {'sourceNodeID' : 'Core_switch_1','destinationNodeID' : 'TOR_4'},
-                    {'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'TOR_1'},
-                    {'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'TOR_2'},
-                    {'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'TOR_3'},
-                    {'sourceNodeID' : 'Core_switch_2','destinationNodeID' : 'TOR_4'},
-                    # TOR to Server 
-                    {'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_1'},
-                    {'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_2'},
-                    {'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_3'},
-                    {'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_4'},
-                    {'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_5'},
-                    {'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_6'},
-                    {'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_7'},
-                    {'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_8'},
-                    {'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_9'},
-                    {'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_10'},
-                    {'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_11'},
-                    {'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_12'},
-                    {'sourceNodeID' : 'TOR_1','destinationNodeID' : 'Server_13'},
-                    {'sourceNodeID' : 'TOR_2','destinationNodeID' : 'Server_14'},
-                    {'sourceNodeID' : 'TOR_3','destinationNodeID' : 'Server_15'},
-                    {'sourceNodeID' : 'TOR_4','destinationNodeID' : 'Server_16'},               
-                ]
-# Initiating an Plot instance 
-x = NetPlot()
-# Adding node by node and edge by edge
-x.addNode(nodeName='Router_17',nodeType='router')
-x.addNode(nodeName='Router_18',nodeType='router')
-# Adding lists of nodes and edges 
-x.addLink('Router_17','Router_18')
-x.addLink('Router_17','Router_1')
-x.addNodeList(device_list)
-x.addLinkList(connection_list)
+    # Router to Core
+    {'sourceNodeID': 'Router_1', 'destinationNodeID': 'Core_switch_1', 'source_label': 'Gi0/1', 'target_label': 'Eth1/1'},
+    {'sourceNodeID': 'Router_1', 'destinationNodeID': 'Core_switch_2', 'source_label': 'Gi0/2', 'target_label': 'Eth1/1'},
+    {'sourceNodeID': 'Router_2', 'destinationNodeID': 'Core_switch_1', 'source_label': 'Gi0/1', 'target_label': 'Eth1/2'},
+    {'sourceNodeID': 'Router_2', 'destinationNodeID': 'Core_switch_2', 'source_label': 'Gi0/2', 'target_label': 'Eth1/2'},
+    # Core to Leaf
+    {'sourceNodeID': 'Core_switch_1', 'destinationNodeID': 'TOR_1', 'source_label': 'Eth1/3', 'target_label': 'Eth1/49'},
+    {'sourceNodeID': 'Core_switch_1', 'destinationNodeID': 'TOR_2', 'source_label': 'Eth1/4', 'target_label': 'Eth1/49'},
+    {'sourceNodeID': 'Core_switch_2', 'destinationNodeID': 'TOR_1', 'source_label': 'Eth1/3', 'target_label': 'Eth1/50'},
+    {'sourceNodeID': 'Core_switch_2', 'destinationNodeID': 'TOR_2', 'source_label': 'Eth1/4', 'target_label': 'Eth1/50'},
+    # Leaf to Server
+    {'sourceNodeID': 'TOR_1', 'destinationNodeID': 'Server_1', 'source_label': 'Eth1/1', 'target_label': 'eth0'},
+    {'sourceNodeID': 'TOR_2', 'destinationNodeID': 'Server_2', 'source_label': 'Eth1/1', 'target_label': 'eth0'},
+]
 
-# Output 
-# 1- using method "display_xml"
-print(x.display_xml())
-# 2- printing the class will automatically call the "display_xml" method
-print(x)
-# 3- Exporting to XML file directly
-x.exportXML('examples/output.xml')
+# Create a new plot
+plot = NetPlot()
 
+# Add the nodes and links
+plot.addNodeList(device_list)
+plot.addLinkList(connection_list)
+
+# Export the diagram to an XML file
+plot.exportXML('datacenter_diagram.xml')
+
+print("Diagram 'datacenter_diagram.xml' created successfully.")
 ```
-#### Output
-![Data Center Example output](examples/example_1_output_snapshot.png)
+
+## Output
+
+After generating the XML file and applying a layout in Draw.io, your diagram will clearly show the network topology with all the specified details.
+
+*(Note: The previous output image has been removed as it is now outdated. Please generate a new diagram using the updated code to see the new features in action.)*
