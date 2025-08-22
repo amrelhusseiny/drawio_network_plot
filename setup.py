@@ -2,8 +2,8 @@
 
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1' 
-DESCRIPTION = 'Plot Network using python , and output to DrawIO file'
+VERSION = '0.1.0'
+DESCRIPTION = 'A Python library to programmatically create Draw.io network diagrams.'
 
 with open('README.md') as readme_file:
        LONG_DESCRIPTION = readme_file.read()
@@ -12,7 +12,7 @@ with open('README.md') as readme_file:
 setup(
        # the name must match the folder name 'verysimplemodule'
         name="drawio_network_plot", 
-        version="0.0.02 Beta",
+        version=VERSION,
         author="Amr ElHusseiny",
         author_email="amroashram@hotmail.com",
         description=DESCRIPTION,
